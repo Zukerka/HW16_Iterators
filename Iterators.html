@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        const films = [
+            {
+                name: 'Back to the future',
+                year: 1985,
+                category: ['fantasy', 'comedy']
+            },
+            {
+                name: 'Titanic',
+                year: 1991,
+                category: ['drama']
+            },
+            {
+                name: 'Green mile',
+                year: 1998,
+                category: ['drama', 'fantasy']
+            },
+            {
+                name: 'Freddie Kruger',
+                year: 1998,
+                category: ['horror']
+            }
+        ];
+        
+        const groupByProperty = (list, property) => {
+            const map = list.reduce((map, item) => {
+
+                for(i = 0; i < item[property].length; i++){
+
+                    if(!map[item[property][i]]){
+                        map[item[property][i]] = []; 
+                    }
+    
+                    map[item[property][i]].push(item); 
+                }
+                
+                return map; 
+            }, {})
+
+            map[Symbol.iterator] = function(){
+                const values = Object.values(this).flatMap(x => x)
+
+                let index = 0; 
+
+                return {
+                    next(){
+                        if (index === values.length){
+                            return {
+                            done: true
+                            }
+                            
+                        }
+                        
+                        return {
+                            done: false, 
+                            value: values[index++]
+                        }
+                    }
+                }
+            }
+
+            return map; 
+        }
+
+        const filmsGroup = groupByProperty(films, 'category');
+
+        for (const film of filmsGroup) {
+            console.log('film', film);
+        }
+
+    </script>
+</body>
+</html>
